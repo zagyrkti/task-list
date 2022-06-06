@@ -1,19 +1,23 @@
 import useSWR from 'swr'
-import Person from '../components/Person'
-
-const fetcher = (url) => fetch(url).then((res) => res.json())
+import Task from '../components/task'
+import Layout from '../components/layout';
+import utilStyles from '../styles/utils.module.css'
+import { fetcher } from '../utils/fetcher';
 
 export default function Index() {
-  const { data, error } = useSWR('/api/people', fetcher)
+  const { data, error } = useSWR('/api/tasks', fetcher)
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div>Loading...</div>
 
   return (
-    <ul>
-      {data.map((p, i) => (
-        <Person key={i} person={p} />
-      ))}
-    </ul>
+    <Layout>
+      <h1 className={utilStyles.headingLg}>Tasks</h1>
+      <ul className={utilStyles.list}>
+        {data.map((p, i) => (
+            <Task key={i} task={p} />
+        ))}
+      </ul>
+    </Layout>
   )
 }
